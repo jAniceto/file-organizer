@@ -1,25 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 import os
-
-
-class Directory:
-    def __init__(self):
-        self.path = None
-        self.subdirs = None
-
-    def get_subdirs(self):
-        subdirs = []
-        for item in os.listdir(self.path):
-            if os.path.isfile(os.path.join(self.path, item)):
-                continue
-            else:
-                subdirs.append(item)
-        self.subdirs = subdirs
-        return subdirs
-
-    def subdirs_full_path(self):
-        return [os.path.join(self.path, x) for x in self.subdirs]
+import file_organizer as fo
 
 
 class Application(Frame):
@@ -29,8 +11,8 @@ class Application(Frame):
         master.title('File Organizer')  # Width height
         master.geometry("700x400")  # Set window size
         self.create_widgets()  # Create widgets/grid
-        self.working_dir = Directory()
-        self.target_dir = Directory()
+        self.working_dir = fo.Directory()
+        self.target_dir = fo.Directory()
         
     def create_widgets(self):
         # Working Directory
@@ -82,15 +64,9 @@ class Application(Frame):
         # Get selected subdirectories
         selected_subdirs = [self.subdirs_listbox.get(idx) for idx in self.subdirs_listbox.curselection()]
         selected_subdirs_full_path = [os.path.join(self.working_dir.path, x) for x in selected_subdirs]
+        # Move contents
+        fo.merge_folders(selected_subdirs_full_path, self.target_dir.path)
 
-        print(f"Copy\n{selected_subdirs_full_path}\nto\n{self.target_dir.path}")
-
-
-def listbox_width(list_items):
-    len_max = 0
-    for item in list_items:
-        if len(item) > len_max:
-            len_max = len(item)
 
 root = Tk()
 app = Application(master=root)
