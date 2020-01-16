@@ -65,6 +65,8 @@ class Application(Frame):
         self.working_dir.path = dir_selected
         # Get working directory subdirectories
         self.working_dir.get_subdirs()
+        # Clear listbox
+        self.subdirs_listbox.delete(0, END)
         # Add subdirectories to listbox
         for item in self.working_dir.subdirs:
             self.subdirs_listbox.insert(END, item)
